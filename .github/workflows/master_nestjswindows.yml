@@ -14,7 +14,6 @@ env:
   AZURE_WEBAPP_PACKAGE_PATH: '.'            # set this to the path to your web app project, defaults to the repository root
   AZURE_WEBAPP_ROOT_PATH: '.'            # set this to the path to your web app project, defaults to the repository root
   NODE_VERSION: '16.x'                            # set this to the node version to use
-  REACT_APP_GAME_TITLE: ${{ secrets.GAME_TITLE }} # set this to provide the environment variable required for the build
   ZIP_PACKAGE_NAME: "app-release.zip"
 
 jobs:
@@ -32,16 +31,17 @@ jobs:
       - name: npm install, build, and test
         run: |
           npm install
-          npm run build --if-present
+          npm run build
+          # npm run test --if-present
       
-      - name: Zip artifact to upload
-        run: 7z a ${{ env.ZIP_PACKAGE_NAME }} ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+      # - name: Zip artifact to upload
+      #   run: 7z a ${{ env.ZIP_PACKAGE_NAME }} ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
       
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
           name: ${{ env.AZURE_WEBAPP_NAME }}
-          path: ${{ env.AZURE_WEBAPP_ROOT_PATH }}/${{ env.ZIP_PACKAGE_NAME }}
+          path: ${{ env.AZURE_WEBAPP_ROOT_PATH }} #/${{ env.ZIP_PACKAGE_NAME }}
           retention-days: 1
 
   deploy:
@@ -64,4 +64,4 @@ jobs:
           app-name: 'nestjswindows'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D5EA3AA012F7446AAE4AF168A84DF0BF }}
-          package: ${{ env.AZURE_WEBAPP_ROOT_PATH }}/${{ env.ZIP_PACKAGE_NAME }}
+          package: ${{ env.AZURE_WEBAPP_ROOT_PATH }} #/${{ env.ZIP_PACKAGE_NAME }}
