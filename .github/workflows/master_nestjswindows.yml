@@ -34,14 +34,14 @@ jobs:
           npm run build
           # npm run test --if-present
       
-      # - name: Zip artifact to upload
-      #   run: 7z a ${{ env.ZIP_PACKAGE_NAME }} ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+      - name: Zip artifact to upload
+        run: 7z a ${{ env.ZIP_PACKAGE_NAME }} ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
       
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
           name: ${{ env.AZURE_WEBAPP_NAME }}
-          path: ${{ env.AZURE_WEBAPP_ROOT_PATH }} #/${{ env.ZIP_PACKAGE_NAME }}
+          path: ${{ env.AZURE_WEBAPP_ROOT_PATH }}/${{ env.ZIP_PACKAGE_NAME }}
           retention-days: 1
 
   deploy:
@@ -64,4 +64,4 @@ jobs:
           app-name: 'nestjswindows'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D5EA3AA012F7446AAE4AF168A84DF0BF }}
-          package: ${{ env.AZURE_WEBAPP_ROOT_PATH }} #/${{ env.ZIP_PACKAGE_NAME }}
+          package: ${{ env.AZURE_WEBAPP_ROOT_PATH }}/${{ env.ZIP_PACKAGE_NAME }}
