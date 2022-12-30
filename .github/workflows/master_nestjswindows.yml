@@ -63,5 +63,5 @@ jobs:
         with:
           app-name: 'nestjswindows'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D5EA3AA012F7446AAE4AF168A84DF0BF }}
+          publish-profile: ${{ secrets.AZURE_WEBAPPSERVICE_PUBLISHPROFILE }}
           package: ${{ env.AZURE_WEBAPP_ROOT_PATH }}/${{ env.ZIP_PACKAGE_NAME }}
